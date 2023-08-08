@@ -69,7 +69,6 @@ async def fetch_all_loans(
 
     pbar = tqdm(desc="Fetching loan data", initial=offset)
 
-    all_loans = []
     while True:
         loans = await fetch_loans(client, query, offset, limit_per_request)
 
@@ -82,12 +81,9 @@ async def fetch_all_loans(
         async with aiofiles.open(folder / f"fetch_offset{offset}.json", "w") as f:
             await f.write(json.dumps(loans, indent=4))
 
-        all_loans.extend(loans)
         offset += limit_per_request
         pbar.update(len(loans))
         await update_offset(offset, folder)
-
-    return all_loans
 
 
 def main(foldername: str = "fetched_data", no_early_stop=False):
