@@ -1,0 +1,9 @@
+gql[all]
+
+# generate pydantic from graphql
+gql_schema_codegen
+pydantic
+
+# support
+fire
+tqdm
