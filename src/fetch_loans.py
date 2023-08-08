@@ -1,40 +1,45 @@
 from pathlib import Path
 import json
 import asyncio
+import aiofiles
+from graphql import DocumentNode
 from gql import gql, Client
 from gql.transport.aiohttp import AIOHTTPTransport
 from tqdm import tqdm
 import fire
 
 
-async def fetch_loans(client: Client, offset: int, limit: int):
-    query_file = Path(__file__).parent / "fetch_loans.graphql"
-    with open(query_file) as f:
-        query = gql(f.read())
+async def fetch_loans(client: Client, query: DocumentNode, offset: int, limit: int):
+    if query is None:
+        query_file = Path(__file__).parent / "fetch_loans.graphql"
+        async with aiofiles.open(query_file) as f:
+            query = await f.read()
+            query = gql(query)
 
     result = await client.execute_async(query, variable_values={"offset": offset, "limit": limit})
     return result["lend"]["loans"]["values"]
 
 
-def read_offset(folder: Path) -> int:
+async def read_offset(folder: Path) -> int:
     """read the stored offset, or init it to zero"""
     offsetfile = folder / ".offset"
     try:
-        with open(offsetfile) as f:
-            offset = int(f.read())
+        async with aiofiles.open(offsetfile) as f:
+            offset = await f.read()
+            offset = int(offset)
     except FileNotFoundError:
         folder.mkdir(parents=True, exist_ok=True)
         offset = 0
-        with open(offsetfile, "w") as f:
-            f.write(str(offset))
+        async with aiofiles.open(offsetfile, "w") as f:
+            await f.write(str(offset))
     return offset
 
 
-def update_offset(offset: int, folder: Path):
+async def update_offset(offset: int, folder: Path):
     """Update the offset, or read the offset when"""
     offsetfile = folder / ".offset"
-    with open(offsetfile, "w") as f:
-        f.write(str(offset))
+    async with aiofiles.open(offsetfile, "w") as f:
+        await f.write(str(offset))
 
 
 async def fetch_all_loans(
@@ -49,20 +54,24 @@ async def fetch_all_loans(
         early_stop_after (int, optional): if None, do not do early stopping. Defaults to 100.
         resume (bool, optional): resume from last time. Defaults to True.
     """
+    query_file = Path(__file__).parent / "fetch_loans.graphql"
+    async with aiofiles.open(query_file) as f:
+        query = await f.read()
+        query = gql(query)
 
     folder = Path.cwd() / folder
 
     if resume:
-        offset = read_offset(folder)
+        offset = await read_offset(folder)
     else:
         offset = 0
-        update_offset(offset, folder)
+        await update_offset(offset, folder)
 
     pbar = tqdm(desc="Fetching loan data", initial=offset)
 
     all_loans = []
     while True:
-        loans = await fetch_loans(client, offset, limit_per_request)
+        loans = await fetch_loans(client, query, offset, limit_per_request)
 
         if not loans:
             break
@@ -70,13 +79,13 @@ async def fetch_all_loans(
         if early_stop_after and offset > early_stop_after:
             break
 
-        with open(folder / f"fetch_offset{offset}.json", "w") as f:
-            json.dump(loans, f, indent=4)
+        async with aiofiles.open(folder / f"fetch_offset{offset}.json", "w") as f:
+            await f.write(json.dumps(loans, indent=4))
 
         all_loans.extend(loans)
         offset += limit_per_request
         pbar.update(len(loans))
-        update_offset(offset, folder)
+        await update_offset(offset, folder)
 
     return all_loans
 

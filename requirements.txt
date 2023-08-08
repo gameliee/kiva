@@ -1,4 +1,5 @@
 gql[all]
+aiofiles
 
 # generate pydantic from graphql
 gql_schema_codegen
