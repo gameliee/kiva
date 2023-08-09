@@ -1,9 +1,14 @@
+# fetch data
 gql[all]
 aiofiles
-
-# generate pydantic from graphql
-gql_schema_codegen
+gql_schema_codegen # generate pydantic from graphql
 pydantic
+
+scrapy
+
+# data processing
+pandas
+seaborn
 
 # support
 fire
