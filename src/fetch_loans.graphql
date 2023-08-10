@@ -1,15 +1,22 @@
-query FetchLoans($offset: Int!, $limit: Int!) {
+query FetchLoans($offset: Int!, $limit: Int!) 
+{
   lend {
     loans(offset: $offset, limit: $limit, filters: {distributionModel: both, status: all}, sortBy: newest) {
       totalCount
       values {
         activity {
-          id
+          id,
+          name
         }
         anonymizationLevel
         borrowerCount
         borrowers {
-          id
+          id,
+          borrowedAmount,
+          firstName,
+          gender,
+          isPrimary,
+          pictured
         }
         dafEligible
         delinquent
@@ -18,13 +25,47 @@ query FetchLoans($offset: Int!, $limit: Int!) {
         disbursalDate
         distributionModel
         endorser {
-          id
+          id,
+          image {
+            id,
+            url(presetSize: default),
+          },
+          inviteeCount,
+          lenderPage {
+            city
+            state
+            country {
+              name
+              isoCode
+              region
+              ppp
+              numLoansFundraising
+              fundsLentInCountry
+            }
+            loanBecause
+            occupation
+            otherInfo
+            url
+            whereabouts
+          }
+          loanCount
+          memberSince
+          name
+          publicId
         }
         fundraisingDate
         gender
         geocode {
           city
           state
+          country {
+            name
+            isoCode
+            region
+            ppp
+            numLoansFundraising
+            fundsLentInCountry
+          }
           postalCode
           latitude
           longitude
@@ -32,7 +73,8 @@ query FetchLoans($offset: Int!, $limit: Int!) {
         hasCurrencyExchangeLossLenders
         id
         image {
-          id
+          id,
+          url(presetSize: default)
         }
         isMatchable
         inPfp
@@ -50,6 +92,9 @@ query FetchLoans($offset: Int!, $limit: Int!) {
         name
         originalLanguage {
           id
+          isActive
+          isoCode
+          name
         }
         minNoteSize
         paidAmount
@@ -61,13 +106,25 @@ query FetchLoans($offset: Int!, $limit: Int!) {
         repaymentInterval
         sector {
           id
+          name
         }
         status
         tags
         terms {
+          currency
           currencyFullName
           disbursalAmount
           disbursalDate
+          expectedPayments {
+            amount
+            dueToKivaDate
+            effectiveDate
+            localAmount
+          }
+          loanAmount
+          lenderRepaymentTerm
+          lossLiabilityCurrencyExchange
+          lossLiabilityNonpayment
           flexibleFundraisingEnabled
         }
         use
