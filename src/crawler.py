@@ -1,3 +1,4 @@
+from random import randint
 from pathlib import Path
 import json
 import scrapy
@@ -23,27 +24,32 @@ class MyCrawlGraphQlSpider(CrawlSpider):
         },
         # 'DUPEFILTER_CLASS': RFPDupeFilter,
         "AUTOTHROTTLE_ENABLED": True,
-        "LOG_LEVEL": "WARNING",
+        "LOG_LEVEL": "INFO",
+        "LOG_FILE": "scrapy.log",
     }
 
     rules = (Rule(LinkExtractor(), callback="parse_response", follow=True),)
 
     def start_requests(self):
         # Define initial values for offset and limit
-        offset = 0
+        # We can take advantage of this to increase the request number
+        self.NUMOFFSET = 32
+
         limit = 20
+        for i in range(self.NUMOFFSET):
+            offset = i * limit
 
-        # Create a JSON object with the query and variables
-        request_data = {"query": QUERY, "variables": {"offset": offset, "limit": limit}}
+            # Create a JSON object with the query and variables
+            request_data = {"query": QUERY, "variables": {"offset": offset, "limit": limit}}
 
-        yield scrapy.Request(
-            url=self.start_urls[0],
-            method="POST",
-            headers={"Content-Type": "application/json"},
-            body=json.dumps(request_data),
-            callback=self.parse_response,
-            meta={"offset": offset, "limit": limit},
-        )
+            yield scrapy.Request(
+                url=self.start_urls[0],
+                method="POST",
+                headers={"Content-Type": "application/json"},
+                body=json.dumps(request_data),
+                callback=self.parse_response,
+                meta={"offset": offset, "limit": limit},
+            )
 
     def parse_response(self, response):
         data = json.loads(response.text)
@@ -53,7 +59,7 @@ class MyCrawlGraphQlSpider(CrawlSpider):
             yield {"loan": loan}  # Yield Scrapy items
 
         # Perform pagination by incrementing the offset and making a new request
-        offset = response.meta["offset"] + response.meta["limit"]
+        offset = response.meta["offset"] + response.meta["limit"] * self.NUMOFFSET
         limit = response.meta["limit"]
 
         if loans:
