@@ -35,7 +35,7 @@ class MyCrawlGraphQlSpider(CrawlSpider):
         # We can take advantage of this to increase the request number
         self.NUMOFFSET = 32
 
-        limit = 20
+        limit = 200
         for i in range(self.NUMOFFSET):
             offset = i * limit
 
