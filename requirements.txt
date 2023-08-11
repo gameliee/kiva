@@ -13,3 +13,5 @@ seaborn
 # support
 fire
 tqdm
+spidermon[monitoring]
+country-converter
