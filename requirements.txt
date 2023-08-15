@@ -8,7 +8,12 @@ scrapy
 
 # data processing
 pandas
+scikit-learn
+# visualization
+plotly
 seaborn
+dtale
+plotnine
 
 # support
 fire
