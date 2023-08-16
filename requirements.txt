@@ -3,8 +3,8 @@ gql[all]
 aiofiles
 gql_schema_codegen # generate pydantic from graphql
 pydantic
-
 scrapy
+pyarrow
 
 # data processing
 pandas
