@@ -6,6 +6,12 @@ query FetchLoansWithActivity($offset: Int!, $limit: Int!)
       values {
         id
         name
+        fundraisingDate
+        raisedDate
+        loanAmount
+        loanFundraisingInfo {
+          fundedAmount
+        }
         geocode {
           country {
             name

@@ -17,6 +17,9 @@ plotnine
 ipywidgets>=7.6 # for use plotly inside jupyter
 jupyter-dash
 
+# graph
+networkx[default]
+
 # support
 fire
 tqdm
