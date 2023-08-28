@@ -161,4 +161,45 @@ enum LoanSearchStatusEnum {
 
 ```
 
+## Loans with Lenders and Tags and LendingActions
 
+```graphql
+{
+  lend {
+    loans(offset: 0, limit: 1, filters: {distributionModel: both, status: all}, sortBy: newest) {
+      totalCount
+      values {
+        id
+        name
+        geocode {
+          country {
+            name
+          }
+        }
+        tags
+        sector {
+          id
+          name
+        }
+        activity {
+          id
+          name
+        }
+        lendingActions(offset: 0, limit: 1000000) {
+          totalCount
+          values {
+            lender {
+              id
+              name
+              publicId
+            }
+            shareAmount
+            teams
+            latestSharePurchaseDate
+          }
+        }
+      }
+    }
+  }
+}
+```
