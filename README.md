@@ -22,3 +22,12 @@ python src/fetch_loans.py -f data/first_run
   ```bash
   python -m gql_schema_codegen -u https://api.kivaws.org/graphql -t ./schema_types.py
   ```
+
+## Visualize the graphql
+
+```bash
+npm install -g get-graphql-schema
+get-graphql-schema 'https://api.kivaws.org/graphql' > schema2.graphql         
+```
+
+Copy the content of `schema2.graphql` and paste into <https://graphql-kit.com/graphql-voyager/>
