@@ -19,6 +19,7 @@ jupyter-dash
 
 # graph
 networkx[default]
+neo4j
 
 # support
 fire

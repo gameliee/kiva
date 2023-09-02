@@ -1,0 +1,18 @@
+version: '3'
+
+volumes:
+  neo4j_persistent:
+
+services:
+  neo4j:
+    image: neo4j
+    volumes:
+      - neo4j_persistent:/var/lib/neo4j
+      # - ../data/neo4jtry:/var/lib/neo4j/import:ro # to use with Cypher
+      - ../data/neo4jtry:/downloads:ro
+    environment:
+      - NEO4J_AUTH=none
+    ports:
+      - 7474:7474
+      - 7687:7687
+
