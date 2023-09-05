@@ -9,9 +9,14 @@ services:
     volumes:
       - neo4j_persistent:/var/lib/neo4j
       # - ../data/neo4jtry:/var/lib/neo4j/import:ro # to use with Cypher
+      - ./plugins:/var/lib/neo4j/plugins
       - ../data/neo4jtry:/downloads:ro
     environment:
-      - NEO4J_AUTH=none
+      - NEO4J_AUTH=neo4j/strongpassword
+      - NEO4J_PLUGINS=["bloom", "graph-data-science", "apoc"]
+      - NEO4J_server_memory_heap_max__size=20G
+      - NEO4J_server_memory_pagecache_size=20G
+      # - NEO4J_dbms_memory_transaction_total_max=4G
     ports:
       - 7474:7474
       - 7687:7687

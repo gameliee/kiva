@@ -30,3 +30,79 @@ docker compose logs
 ```
 
 Now navigate to `http://localhost:7474` and `:use testdb` to start.
+
+
+## Post import
+
+```cypher
+CREATE CONSTRAINT FOR (lender:Lender)
+REQUIRE lender.id IS UNIQUE
+```
+
+```cypher
+CREATE CONSTRAINT FOR (tag:Tag)
+REQUIRE tag.name IS UNIQUE
+```
+
+```cypher
+CREATE CONSTRAINT FOR (loan:Loan)
+REQUIRE loan.id IS UNIQUE
+```
+
+### stats
+
+```cypher
+MATCH () RETURN COUNT(*) AS STATS
+UNION
+MATCH ()-[]->() RETURN COUNT(*) AS STATS
+```
+
+╒════════╕
+│STATS   │
+╞════════╡
+│4035815 │
+├────────┤
+│55563775│
+└────────┘
+
+### create `INTEREST` relationships
+
+
+```cypher
+CALL apoc.periodic.iterate(
+"MATCH (lender:Lender) RETURN lender",
+"MATCH (lender)-[:LEND]->(loan:Loan)
+ WITH DISTINCT loan as dloan, lender
+ MATCH (dloan)-[:TAGGED_WITH]->(tag:Tag)
+ WITH DISTINCT tag as dtag, lender
+ CREATE (lender)-[:INTEREST]->(dtag)",
+{batchSize: 100, parallel: True}
+)
+```
+
+╒════════╕
+│STATS   │
+╞════════╡
+│4035815 │
+├────────┤
+│69135480│
+└────────┘
+
+
+### create `SHARES_LOAN` relationships
+
+```cypher
+CALL apoc.periodic.iterate(
+"MATCH (l1:Lender), (l2:Lender)
+ WHERE elementId(l1) > elementId(l2)
+ RETURN l1, l2",
+"MATCH (l1)-[:LEND]->(loan)<-[:LEND]-(l2)
+ WITH l1, l2, COUNT(DISTINCT loan) AS commonLoanCount
+ WHERE commonLoanCount > 0
+ CREATE (l1)-[r:SHARES_LOAN {weight: commonLoanCount}]->(l2)",
+{batchSize: 100, parallel: True}
+)
+YIELD *
+```
+
+
