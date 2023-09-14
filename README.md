@@ -31,3 +31,10 @@ get-graphql-schema 'https://api.kivaws.org/graphql' > schema2.graphql
 ```
 
 Copy the content of `schema2.graphql` and paste into <https://graphql-kit.com/graphql-voyager/>
+
+
+## `cuDF`
+
+```bash
+conda create --solver=libmamba -n cudf -c rapidsai -c conda-forge -c nvidia rapids=23.08 python=3.10 cudatoolkit=11.8 graphviz
+```
