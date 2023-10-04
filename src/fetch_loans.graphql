@@ -140,6 +140,19 @@ query FetchLoans($offset: Int!, $limit: Int!)
           youtubeId
         }
         whySpecial
+        lendingActions(offset: 0, limit: 1000000) {
+          totalCount
+          values {
+            lender {
+              id
+              name
+              publicId
+            }
+            shareAmount
+            teams
+            latestSharePurchaseDate
+          }
+        }
       }
     }
   }
