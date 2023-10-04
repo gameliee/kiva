@@ -23,6 +23,12 @@ python src/fetch_loans.py -f data/first_run
   python -m gql_schema_codegen -u https://api.kivaws.org/graphql -t ./schema_types.py
   ```
 
+- avoid commit huge notebook with
+
+  ```bash
+  nbstripout --install --attributes .gitattributes
+  ```
+
 ## Visualize the graphql
 
 ```bash
@@ -36,5 +42,11 @@ Copy the content of `schema2.graphql` and paste into <https://graphql-kit.com/gr
 ## `cuDF`
 
 ```bash
-conda create --solver=libmamba -n cudf -c rapidsai -c conda-forge -c nvidia rapids=23.08 python=3.10 cudatoolkit=11.8 graphviz
+conda create --solver=libmamba -n cudf -c rapidsai -c conda-forge -c nvidia rapids=23.08 python=3.10 cudatoolkit=11.8 graphviz cugraph
+```
+
+## Generate report
+
+```bash
+jupyter nbconvert --to html alldata_cudf.ipynb
 ```
