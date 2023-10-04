@@ -4,6 +4,7 @@ First, run with
 
 ```bash
 cd extra
+docker compose up -d
 docker compose exec neo4j /bin/bash
 ```
 
@@ -49,6 +50,8 @@ CREATE CONSTRAINT FOR (loan:Loan)
 REQUIRE loan.id IS UNIQUE
 ```
 
+
+
 ### stats
 
 ```cypher
@@ -64,6 +67,43 @@ MATCH ()-[]->() RETURN COUNT(*) AS STATS
 ├────────┤
 │55563775│
 └────────┘
+
+╒═══════╕
+│STATS  │
+╞═══════╡
+│736303 │
+├───────┤
+│7876267│
+└───────┘
+
+remove all Nodes which doesn't have any relationship
+
+```cypher
+MATCH (n)
+WHERE NOT (n)--()
+DELETE (n)
+```
+
+Easy out
+
+```cypher
+MATCH (loan:Loan)
+WHERE loan.fundraisingDate < '2018-01-01'
+RETURN COUNT(loan)
+UNION
+MATCH (loan:Loan)
+RETURN COUNT(loan)
+```
+
+╒═══════════╕
+│COUNT(loan)│
+╞═══════════╡
+│1150133    │
+├───────────┤
+│2092121    │
+└───────────┘
+
+With 2 milions Loan, it could take forever to analysize the graph. So, keep only loans in latest 5 years
 
 ### create `INTEREST` relationships
 
@@ -96,7 +136,7 @@ CALL apoc.periodic.iterate(
 "MATCH (l1:Lender), (l2:Lender)
  WHERE elementId(l1) > elementId(l2)
  RETURN l1, l2",
-"MATCH (l1)-[:LEND]->(loan)<-[:LEND]-(l2)
+"MATCH (l1)-[:LEND]->(loan:Loan)<-[:LEND]-(l2)
  WITH l1, l2, COUNT(DISTINCT loan) AS commonLoanCount
  WHERE commonLoanCount > 0
  CREATE (l1)-[r:SHARES_LOAN {weight: commonLoanCount}]->(l2)",
@@ -105,4 +145,18 @@ CALL apoc.periodic.iterate(
 YIELD *
 ```
 
+### create `SHARES_TAG` relationships
 
+```cypher
+CALL apoc.periodic.iterate(
+"MATCH (l1:Lender), (l2:Lender)
+ WHERE elementId(l1) > elementId(l2)
+ RETURN l1, l2",
+"MATCH (l1)-[:INTEREST]->(tag:Tag)<-[:LEINTERESTND]-(l2)
+ WITH l1, l2, COUNT(DISTINCT tag) AS commonTagCount
+ WHERE commonTagCount > 0
+ CREATE (l1)-[r:SHARES_TAG {weight: commonTagCount}]->(l2)",
+{batchSize: 100, parallel: True}
+)
+YIELD *
+```

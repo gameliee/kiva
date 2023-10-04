@@ -2,6 +2,7 @@ version: '3'
 
 volumes:
   neo4j_persistent:
+  pgadmin-data:
 
 services:
   neo4j:
@@ -21,3 +22,28 @@ services:
       - 7474:7474
       - 7687:7687
 
+  postgres:
+    image: postgres:16.0-alpine
+    restart: always
+    environment: 
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+      POSTGRES_DB: datdb
+    # volumes: 
+      # - ./dbconfig:/docker-entrypoint-initdb.d
+    ports: 
+      - 32772:5432
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    ports:
+      - "8888:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: example@example.com
+      PGADMIN_DEFAULT_PASSWORD: supersecret
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
