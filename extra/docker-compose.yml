@@ -29,7 +29,10 @@ services:
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "postgres"
       POSTGRES_DB: datdb
-    # volumes: 
+      POSTGRES_SHARED_PRELOAD_LIBRARIES: 'pg_stat_statements'
+    volumes: 
+      - ./postgresql.conf:/var/lib/postgresql/data/postgresql.conf
+      - ./pgdata:/var/lib/postgresql/data
       # - ./dbconfig:/docker-entrypoint-initdb.d
     ports: 
       - 32772:5432
@@ -40,6 +43,8 @@ services:
   pgadmin:
     image: dpage/pgadmin4
     restart: always
+    profiles:
+      - admin
     ports:
       - "8888:80"
     environment:
