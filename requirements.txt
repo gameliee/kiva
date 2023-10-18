@@ -16,10 +16,11 @@ dtale
 plotnine
 ipywidgets>=7.6 # for use plotly inside jupyter
 jupyter-dash
+jupyter_bokeh
 
 # graph
 networkx[default]
-neo4j
+gqlalchemy # connect to memgraph
 
 # support
 fire

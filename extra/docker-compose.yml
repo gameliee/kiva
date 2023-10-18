@@ -1,26 +1,28 @@
 version: '3'
 
 volumes:
-  neo4j_persistent:
   pgadmin-data:
+  mg_lib:
+  mg_log:
+  mg_etc:
 
 services:
-  neo4j:
-    image: neo4j
-    volumes:
-      - neo4j_persistent:/var/lib/neo4j
-      # - ../data/neo4jtry:/var/lib/neo4j/import:ro # to use with Cypher
-      - ./plugins:/var/lib/neo4j/plugins
-      - ../data/neo4jtry:/downloads:ro
-    environment:
-      - NEO4J_AUTH=neo4j/strongpassword
-      - NEO4J_PLUGINS=["bloom", "graph-data-science", "apoc"]
-      - NEO4J_server_memory_heap_max__size=20G
-      - NEO4J_server_memory_pagecache_size=20G
-      # - NEO4J_dbms_memory_transaction_total_max=4G
+  memgraph:
+    image: memgraph/memgraph-platform:2.11.1-memgraph2.11.0-lab2.8.3-mage1.11.1
+    # image: memgraph/memgraph-mage:1.3-cugraph-22.02-cuda-11.5
     ports:
-      - 7474:7474
       - 7687:7687
+      - 7444:7444
+      - 3000:3000
+    volumes:
+      - mg_lib:/var/lib/memgraph
+      - mg_log:/var/log/memgraph
+      - mg_etc:/etc/memgraph
+      - ../data/neo4jtry:/csv_data:ro
+    environment:
+      - MEMGRAPH="--memory-limit=51200 --query-execution-timeout-sec=18000" # in MiB
+    entrypoint: ["/usr/bin/supervisord"]
+
 
   postgres:
     image: postgres:16.0-alpine
