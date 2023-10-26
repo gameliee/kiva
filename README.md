@@ -1,52 +1,7 @@
 # Data analysis from [kiva.org](https://www.kiva.org)
 
-## Usage
+This project contains scripts and notebooks for
 
-Fetch the data with
-
-```bash
-python src/fetch_loans.py -f data/first_run
-```
-
-## developer notes
-
-- please use `pre-commit`
-- generate `schema.graphql` from introspection with
-
-  ```bash
-  gql-cli --print-schema 'https://api.kivaws.org/graphql' >! schema.graphql
-  ```
-
-- generate `pydantic` from introspection with
-
-  ```bash
-  python -m gql_schema_codegen -u https://api.kivaws.org/graphql -t ./schema_types.py
-  ```
-
-- avoid commit huge notebook with
-
-  ```bash
-  nbstripout --install --attributes .gitattributes
-  ```
-
-## Visualize the graphql
-
-```bash
-npm install -g get-graphql-schema
-get-graphql-schema 'https://api.kivaws.org/graphql' > schema2.graphql         
-```
-
-Copy the content of `schema2.graphql` and paste into <https://graphql-kit.com/graphql-voyager/>
-
-
-## `cuDF`
-
-```bash
-conda create --solver=libmamba -n cudf -c rapidsai -c conda-forge -c nvidia rapids=23.08 python=3.10 cudatoolkit=11.8 graphviz cugraph
-```
-
-## Generate report
-
-```bash
-jupyter nbconvert --to html alldata_cudf.ipynb
-```
+- Download data from the kiva platform
+- Data preprocessing (simple ELT)
+- Various analysis on the data
