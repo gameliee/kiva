@@ -1,6 +1,6 @@
 .offset
 schema.graphql
 __pycache__
-data
-fulldata
+# data
+# fulldata
 dragrace
