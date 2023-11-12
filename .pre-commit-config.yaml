@@ -7,17 +7,13 @@ repos:
   rev: v2.3.0
   hooks:
   - id: flake8
-- repo: https://github.com/jazzband/pip-tools
-  rev: 7.3.0
+- repo: local
   hooks:
   - id: pip-compile
-    name: pip-compile requirements.in
-    files: ^requirements/requirements\.(in|txt)$
-    args: [requirements/requirements.in]
-  - id: pip-compile
-    name: pip-compile dev-requirements.in
-    files: ^requirements/dev-requirements\.(in|txt)$
-    args: [requirements/dev-requirements.in]
+    name: pip-compile
+    files: ^requirements\/(mac-)?requirements\.(in|txt)$
+    entry: ./requirements/precommit.sh
+    language: script
 - repo: https://github.com/kynan/nbstripout
   rev: 0.6.1
   hooks:
