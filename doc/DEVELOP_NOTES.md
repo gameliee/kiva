@@ -1,5 +1,13 @@
 # Data analysis from [kiva.org](https://www.kiva.org)
 
+## Environment setup
+
+```bash
+pip install -r requirements/dev-requirements.txt requirements/requirements.txt
+# OR
+pip-sync requirements/dev-requirements.txt requirements/requirements.txt
+```
+
 ## Usage
 
 Fetch the data with
@@ -10,7 +18,7 @@ python src/fetch_loans.py -f data/first_run
 
 ## developer notes
 
-- please use `pre-commit`
+- please use `pre-commit`. Just lauch `pre-commit install`
 - generate `schema.graphql` from introspection with
 
   ```bash
