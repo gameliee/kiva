@@ -50,3 +50,7 @@ conda create --solver=libmamba -n cudf -c rapidsai -c conda-forge -c nvidia rapi
 ```bash
 jupyter nbconvert --to html alldata_cudf.ipynb
 ```
+
+## best practice with jupter notebook
+
+ref: https://blog.jmswaney.com/tips-for-using-jupyter-notebooks-with-github
