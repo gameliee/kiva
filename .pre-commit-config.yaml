@@ -7,3 +7,18 @@ repos:
   rev: v2.3.0
   hooks:
   - id: flake8
+- repo: https://github.com/jazzband/pip-tools
+  rev: 7.3.0
+  hooks:
+  - id: pip-compile
+    name: pip-compile requirements.in
+    files: ^requirements/requirements\.(in|txt)$
+    args: [requirements/requirements.in]
+  - id: pip-compile
+    name: pip-compile dev-requirements.in
+    files: ^requirements/dev-requirements\.(in|txt)$
+    args: [requirements/dev-requirements.in]
+- repo: https://github.com/kynan/nbstripout
+  rev: 0.6.1
+  hooks:
+    - id: nbstripout
