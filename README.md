@@ -8,7 +8,7 @@ This project contains scripts and notebooks for
 
 Project tree:
 
-```
+```text
 .
 ├── data
 │   ├── gen: for store graphs, including Nodes, Edges, etc.
@@ -19,3 +19,13 @@ Project tree:
     ├── checkpoints: store intermediate files
     ├── images: store intermediate images
 ```
+
+## Environment setup
+
+```bash
+# macos
+pip-sync requirements/mac-requirements.txt requirements/requirements.txt
+# linux
+pip-sync requirements/requirements.txt
+```
+

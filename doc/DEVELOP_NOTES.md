@@ -1,13 +1,5 @@
 # Data analysis from [kiva.org](https://www.kiva.org)
 
-## Environment setup
-
-```bash
-pip install -r requirements/dev-requirements.txt requirements/requirements.txt
-# OR
-pip-sync requirements/dev-requirements.txt requirements/requirements.txt
-```
-
 ## Usage
 
 Fetch the data with
