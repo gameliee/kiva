@@ -7,3 +7,14 @@ repos:
   rev: v2.3.0
   hooks:
   - id: flake8
+- repo: local
+  hooks:
+  - id: pip-compile
+    name: pip-compile
+    files: ^requirements\/(mac-)?requirements\.(in|txt)$
+    entry: ./requirements/precommit.sh
+    language: script
+- repo: https://github.com/kynan/nbstripout
+  rev: 0.6.1
+  hooks:
+    - id: nbstripout

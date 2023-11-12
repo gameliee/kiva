@@ -1,8 +1,0 @@
-pre-commit
-flake8
-black
-fire
-line_profiler
-
-nbstripout==0.6.1
-jupyterlab_code_formatter
