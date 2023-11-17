@@ -1,0 +1,3 @@
+[submodule "extra/biLouvian_src"]
+	path = extra/biLouvian_src
+	url = https://github.com/paolapesantez/biLouvain.git

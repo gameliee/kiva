@@ -22,6 +22,7 @@ pandas
 scikit-learn
 
 # visualization
+tabulate
 plotly
 seaborn
 dtale
@@ -29,7 +30,6 @@ plotnine
 ipywidgets>=7.6 # for use plotly inside jupyter
 jupyter-dash
 jupyter_bokeh
-ForceAtlas2 # layout for networkx
 
 # graph
 networkx[default]
