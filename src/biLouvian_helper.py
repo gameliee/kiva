@@ -55,16 +55,24 @@ class CoClusterItem:
     def __hash__(self) -> int:
         return hash((self.cocluster_id, self.first, self.second, self.first, self.second))
 
-    def similarity(self, other: "CoClusterItem") -> float:
-        """Calculate the similarity between two coclusters"""
+    def similarity_first(self, other: "CoClusterItem") -> float:
+        """Calculate the similarity between two coclusters based on the first vertex type"""
         # overlap over union of the first vertex type
         first_overlap = len(self.first.member.intersection(other.first.member))
         first_union = len(self.first.member.union(other.first.member))
-        first_similarity = first_overlap / first_union
+        return first_overlap / first_union
+
+    def similarity_second(self, other: "CoClusterItem") -> float:
+        """Calculate the similarity between two coclusters based on the second vertex type"""
         # overlap over union of the second vertex type
         second_overlap = len(self.second.member.intersection(other.second.member))
         second_union = len(self.second.member.union(other.second.member))
-        second_similarity = second_overlap / second_union
+        return second_overlap / second_union
+
+    def similarity(self, other: "CoClusterItem") -> float:
+        """Calculate the similarity between two coclusters"""
+        first_similarity = self.similarity_first(other)
+        second_similarity = self.similarity_second(other)
         # return the average of the two similarities
         return (first_similarity + second_similarity) / 2
 
