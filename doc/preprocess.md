@@ -26,4 +26,10 @@ b ----> C["fundraisingDate > 2013-01-01"]
 G --> T[/"tags_20130101.csv"/]
 G --> PRO[/"projects_20130101.csv"/]
 G --> PT[/"project_tags_20130101.csv"/]
+
+b --preprocess all--> N["remove duplicated project"]
+--> P["create big table Lender-Project-Tag"]
+--> Q["tag preprocess (remove unwanted tags)"]
+--> R["remove anonymous Lender"]
+--> S[/"Save to data/gen/preprocessed_2023-08-28T11-09-39.parquet"/]
 ```
