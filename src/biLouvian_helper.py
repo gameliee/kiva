@@ -90,9 +90,9 @@ class CommunityResultTime:
     """class of keeping track of community detection result with time"""
 
     community: CommunityResult
-    country: str
     time_from: datetime
     time_to: datetime
+    country: str = "all"
     biLouvian_order: int = 1
 
 
