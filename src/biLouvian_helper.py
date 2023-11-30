@@ -14,6 +14,7 @@ __all__ = [
     "CommunityResultTime",
     "result_mutaraplus",
     "result_community",
+    "quality_measure",
 ]
 
 
@@ -289,3 +290,29 @@ def test_result_mutaraplus(get_prefix, create_mutarapluse_file):
 
 def test_result_community(get_prefix, create_comm_result_file):
     assert result_community(get_prefix)
+
+
+"""similarity calculating part, from M"""
+
+
+def jaccard(A, B):
+    return len(set(A) & set(B)) / len(set(A) | set(B))
+
+
+def test_jard():
+    assert jaccard([1, 2, 3], [1, 2, 3]) == 1.0
+    assert jaccard([1, 2, 3], [1, 2, 4]) == 0.5
+    assert jaccard([1, 2, 3], [4, 5, 6]) == 0.0
+
+
+def quality_measure(real_clusters: List[Set[Any]], computed_clusters: List[Set[Any]]):
+    somme = 0
+    for cluster in real_clusters:
+        somme += max([jaccard(cluster, y) for y in computed_clusters])
+
+    return somme / len(real_clusters)
+
+
+def test_quality_measure():
+    assert quality_measure([{1}], [{1}]) == 1.0
+    assert quality_measure([{1}], [{1}, {2}]) == 1.0
