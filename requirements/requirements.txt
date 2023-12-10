@@ -300,7 +300,9 @@ jupyterlab-pygments==0.2.2
 jupyterlab-widgets==3.0.9
     # via ipywidgets
 kaleido==0.2.1
-    # via dtale
+    # via
+    #   -r requirements/requirements.in
+    #   dtale
 kiwisolver==1.4.5
     # via matplotlib
 line-profiler==4.1.2

@@ -30,6 +30,7 @@ plotnine
 ipywidgets>=7.6 # for use plotly inside jupyter
 jupyter-dash
 jupyter_bokeh
+kaleido # for plotly to save images
 
 # graph
 networkx[default]
